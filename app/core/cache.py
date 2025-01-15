@@ -3,10 +3,15 @@ import json
 from typing import Optional, Any
 from functools import wraps
 import hashlib
+import os
+from app.core.config import config_provider
 
 class RedisCache:
-    def __init__(self, host: str = "redis", port: int = 6379, db: int = 0):
-        self.redis_client = Redis(host=host, port=port, db=db, decode_responses=True)
+    def __init__(self, url: str = None, db: int = 0):
+        redis_url = config_provider.get_redis_url()
+        
+        # Create Redis client from the URL
+        self.redis_client = Redis.from_url(redis_url, db=db, decode_responses=True)
         self.default_ttl = 3600  # 1 hour default TTL
 
     def get(self, key: str) -> Optional[Any]:
