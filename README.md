@@ -44,16 +44,20 @@ To set up and run this project, ensure you have the following installed:
 ### Installation Steps
 
 1. **Clone the repository**:
-   git clone https://github.com/your-username/github-pr-fetcher.git
+   git clone https://github.com/rahberabbas/github-pr-fetcher.git
    cd github-pr-fetcher
 2. **Install required Python packages**:
    pip install -r requirements.txt
 3. **Set up environment variables**:
 
 - Create a `.env` file in the root directory.
-- Add your OpenAI API Key to the `.env` file:
+- Add your API Key to the `.env` file:
   ```
-  OPENAI_API_KEY=your-openai-api-key
+    OPENAI_APIKEY=your-api-key
+    REDISHOST=your-redis-host
+    REDISPORT=your-redis-port
+    REDISUSER=your-redis-user
+    REDISPASSWORD=your-redis-password
   ```
 
 4. **Run the FastAPI server**:
