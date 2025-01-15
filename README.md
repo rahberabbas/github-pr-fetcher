@@ -57,11 +57,19 @@ To set up and run this project, ensure you have the following installed:
   ```
 
 4. **Run the FastAPI server**:
-   uvicorn main:app --reload
+```
+   uvicorn app.main:app --reload
+```
 5. **Start the Celery worker to process background tasks**:
 
 ```
 celery -A app.celery.celery_app.celery worker --loglevel=info
+```
+
+#### Running the Application with Docker
+
+```
+docker-compose up --build
 ```
 
 ### Running Redis
@@ -93,7 +101,7 @@ The request body should be a JSON object structured as follows:
 {
     "github_repo_url": "https://github.com/owner/repo",
     "pr_number": 1,
-    "access_token": "your-github-token"
+    "access_token": "your-github-token" #(Optional)
 }
 ```
 
@@ -109,6 +117,21 @@ On success, you will receive a JSON object containing the task ID for tracking:
     "task_id": "some-task-id"
 }
 ```
+
+
+**Curl Example:**
+```bash
+curl -X 'POST' \
+'github-pr-fetcher-production.up.railway.app/analyze-pr' \
+-H 'accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+    "github_repo_url": "example.com",
+    "pr_number": 0,
+    "access_token": "string" # this is optional
+}'
+```
+
 
 #### Get Task Status
 
@@ -129,6 +152,13 @@ The response includes the current status of the task along with additional infor
     "status": "success",
     "result": { ... } // The result of the task when completed
 }
+```
+
+**Curl Example:**
+```bash
+curl -X 'GET' \
+'github-pr-fetcher-production.up.railway.app/status/task_id' \
+-H 'accept: application/json'
 ```
 
 Possible statuses include:
@@ -189,6 +219,13 @@ If the task is not ready, it will return a `404` status code with this message:
 {
     "detail": "Task result not ready yet"
 }
+```
+
+**Curl Example:**
+```bash
+curl -X 'GET' \
+'github-pr-fetcher-production.up.railway.app/results/task_id' \
+-H 'accept: application/json'
 ```
 
 ## Design Decisions
